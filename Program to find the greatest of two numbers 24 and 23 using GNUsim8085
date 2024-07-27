@@ -1,0 +1,13 @@
+START:  MVI B, 24      ; Load 24 into register B
+        MVI C, 23      ; Load 23 into register C
+
+        MOV A, B       ; Move B (24) to A
+        CMP C          ; Compare A (24) with C (23)
+        JC LESS_THAN   ; If A < C, jump to LESS_THAN
+
+GREATER: MOV A, B      ; If A >= C, move B to A
+         JMP DONE      ; Jump to DONE
+
+LESS_THAN: MOV A, C    ; If A < C, move C to A
+
+DONE:    HLT           ; Halt the program (greatest number is in A)
