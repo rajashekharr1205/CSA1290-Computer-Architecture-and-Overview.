@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+// Function to convert binary string to decimal
+unsigned int binaryToDecimal(const char* binaryStr) {
+    unsigned int decimalNumber = 0;
+    int length = strlen(binaryStr);
+    
+    for (int i = 0; i < length; i++) {
+        if (binaryStr[i] == '1') {
+            decimalNumber += pow(2, length - i - 1);
+        } else if (binaryStr[i] != '0') {
+            printf("Invalid binary input.\n");
+            return -1; // Error indicator for invalid input
+        }
+    }
+    
+    return decimalNumber;
+}
+
+// Function to convert decimal to hexadecimal
+void decimalToHexadecimal(unsigned int decimalNumber) {
+    char hexNumber[100];
+    int i = 0;
+    
+    if (decimalNumber == 0) {
+        printf("Hexadecimal number: 0\n");
+        return;
+    }
+    
+    while (decimalNumber != 0) {
+        int remainder = decimalNumber % 16;
+        if (remainder < 10) {
+            hexNumber[i] = remainder + '0';
+        } else {
+            hexNumber[i] = remainder - 10 + 'A';
+        }
+        i++;
+        decimalNumber = decimalNumber / 16;
+    }
+    
+    printf("Hexadecimal number: ");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("%c", hexNumber[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    char binaryInput[65]; // Buffer to hold binary input, assuming a max of 64 bits
+
+    printf("Enter a binary number: ");
+    scanf("%64s", binaryInput);
+    
+    unsigned int decimalNumber = binaryToDecimal(binaryInput);
+    if (decimalNumber != -1) {
+        decimalToHexadecimal(decimalNumber);
+    }
+    
+    return 0;
+}
