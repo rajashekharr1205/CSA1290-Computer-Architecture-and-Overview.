@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+// Function to convert binary to decimal
+int binaryToDecimal(char binary[]) {
+    int decimal = 0, length = strlen(binary);
+    for (int i = 0; i < length; i++) {
+        if (binary[length - i - 1] == '1') {
+            decimal += pow(2, i);
+        }
+    }
+    return decimal;
+}
+
+// Function to convert decimal to octal
+void decimalToOctal(int decimal) {
+    int octal[100];
+    int i = 0;
+
+    while (decimal != 0) {
+        octal[i] = decimal % 8;
+        decimal = decimal / 8;
+        i++;
+    }
+
+    // Print the octal number in reverse order
+    printf("Octal number: ");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("%d", octal[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    char binary[100];
+
+    printf("Enter a binary number: ");
+    scanf("%s", binary);
+
+    int decimal = binaryToDecimal(binary);
+    decimalToOctal(decimal);
+
+    return 0;
+}
