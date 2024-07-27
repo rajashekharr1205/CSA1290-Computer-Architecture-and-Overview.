@@ -1,0 +1,70 @@
+START:  MVI B, 12      ; Load 12 into register B
+        MVI C, 16      ; Load 16 into register C
+
+        ; Step 1: Compute GCD of B and C
+        MOV D, B       ; Move 12 to D
+        MOV E, C       ; Move 16 to E
+
+GCD_LOOP: MOV A, D     ; Move D to A
+          CMP E        ; Compare A and E
+          JZ GCD_DONE  ; If A == E, GCD found
+          JC GCD_SWAP  ; If A < E, swap D and E
+
+          ; A > E, so subtract E from A (D)
+          SUB E
+          MOV D, A     ; Store the result in D
+          JMP GCD_LOOP ; Repeat the loop
+
+GCD_SWAP: MOV A, E     ; Move E to A
+          MOV E, D     ; Move D to E
+          MOV D, A     ; Move A to D (swapped values)
+          JMP GCD_LOOP ; Repeat the loop
+
+GCD_DONE: ; Now, D contains the GCD of 12 and 16
+
+          ; Step 2: Compute LCM using the formula LCM = (B * C) / GCD
+          MOV A, B     ; Move 12 to A
+          MOV E, A     ; Move 12 to E
+          MOV A, C     ; Move 16 to A
+          CALL MULTIPLY ; Multiply B and C
+
+          MOV A, L     ; Move lower byte of product to A
+          MOV H, A     ; Move to H register
+          MOV A, H     ; Move higher byte of product to A
+          MOV L, A     ; Move to L register
+
+          MOV A, D     ; Move GCD to A
+          CALL DIVIDE  ; Divide the product by GCD
+
+          ; Result of division is in A
+          HLT          ; Halt the program
+
+; Subroutine to multiply B and C
+MULTIPLY: MOV A, E     ; Load E to A
+          MVI H, 0     ; Clear H register
+          MVI L, 0     ; Clear L register
+
+MULT_LOOP: ADD L
+          MOV L, A
+          JNC NEXT
+          INX H
+NEXT:     DCR E
+          JNZ MULT_LOOP
+
+          RET
+
+; Subroutine to divide HL by A (GCD)
+DIVIDE:   MVI D, 0     ; Clear D register
+
+DIV_LOOP: MOV A, H     ; Move higher byte to A
+          SUB D        ; Subtract D
+          JZ DONE_DIV  ; If result is zero, division is done
+          JC LESS_THAN ; If result is negative, HL < GCD
+
+          MOV H, A     ; Move result back to H
+          MOV A, L     ; Move lower byte to A
+          SUB E        ; Subtract lower byte
+          MOV L, A     ; Move result back to L
+
+          INX D        ; Increment D (quotient)
+          JMP DIV_LOOP ; Repeat
