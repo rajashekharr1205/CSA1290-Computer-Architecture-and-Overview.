@@ -1,0 +1,20 @@
+START:  MVI B, 16      ; Load 16 into register B
+        MVI C, 12      ; Load 12 into register C
+
+GCD_LOOP: MOV A, B     ; Move B to A
+          CMP C        ; Compare A and C
+          JZ DONE      ; If A == C, GCD found, jump to DONE
+          JC SWAP      ; If A < C, swap B and C
+
+          ; A > C, so subtract C from A (B)
+          MOV A, B     ; Move B to A
+          SUB C        ; Subtract C from A
+          MOV B, A     ; Store the result in B
+          JMP GCD_LOOP ; Repeat the loop
+
+SWAP:     MOV A, C     ; Move C to A
+          MOV C, B     ; Move B to C
+          MOV B, A     ; Move A to B (swapped values)
+          JMP GCD_LOOP ; Repeat the loop
+
+DONE:     HLT          ; Halt the program (GCD is in B)
