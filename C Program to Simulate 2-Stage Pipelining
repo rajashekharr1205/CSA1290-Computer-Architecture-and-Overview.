@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <unistd.h>  // For sleep function to simulate clock cycles
+
+#define CLOCK_CYCLE_DURATION 1  // Duration of one clock cycle in seconds (for simulation)
+
+// Function to simulate the Fetch stage
+void fetch(int *instruction, int num1, int num2) {
+    *instruction = num1 + num2;  // Fetch the addition instruction (in this case, just perform the addition)
+    printf("Fetch Stage: Fetching addition instruction for %d + %d\n", num1, num2);
+    sleep(CLOCK_CYCLE_DURATION);  // Simulate the time taken for fetching
+}
+
+// Function to simulate the Execute stage
+void execute(int instruction) {
+    printf("Execute Stage: Executing instruction\n");
+    printf("Result: %d\n", instruction);
+    sleep(CLOCK_CYCLE_DURATION);  // Simulate the time taken for execution
+}
+
+int main() {
+    int num1 = 8;
+    int num2 = 10;
+    int instruction;
+    
+    printf("Starting 2-stage pipelining simulation...\n");
+    
+    // Stage 1: Fetch the instruction
+    fetch(&instruction, num1, num2);
+    
+    // Stage 2: Execute the instruction
+    execute(instruction);
+    
+    printf("Pipelining simulation complete.\n");
+    
+    return 0;
+}
